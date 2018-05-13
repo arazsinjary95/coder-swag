@@ -40,10 +40,31 @@ class CategoriesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let category = DataService.instance.getCategories()[indexPath.row]
+        //why sender is category the reson is in dataservice our getproduct it have switch of category!!!
+        performSegue(withIdentifier: "ProductsVC", sender: category)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let productsVC = segue.destination as? ProductsVC {
+            
+            //this for backbarbuttonitem
+            let barBtn = UIBarButtonItem()
+            barBtn.title = ""
+            navigationItem.backBarButtonItem = barBtn
+            
+            //at built time not for production we will create (assertion) this for we know that this is working correctly.
+            assert(sender as? Category != nil)
+            //sender is category here declare is no any, why because in the up in didselectrowat our sender is categoty.
+            productsVC.initProducts(category: sender as! Category)
+        }
 
 }
 
-
+}
 
 
 
